@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,7 +48,13 @@ public class AuthController {
         String userName = userNameAndPassword.get("username");
         String password = userNameAndPassword.get("password");
 
-        UserDetails userDetails = userService.loadUserByUsername(userName);
+        UserDetails userDetails;
+        try {
+            userDetails = userService.loadUserByUsername(userName);
+        } catch (UsernameNotFoundException e) {
+            return new Result("fail", "用户" + userName + "不存在", false);
+        }
+
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, password);
 
         try {
