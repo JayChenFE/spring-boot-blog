@@ -1,6 +1,7 @@
 package hello.controller;
 
 import hello.entity.User;
+import hello.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,19 +20,25 @@ import java.util.Map;
 @Controller
 public class AuthController {
 
-    private UserDetailsService userDetailsService;
+    private UserService userService;
     private AuthenticationManager authenticationManager;
 
     @Inject
-    public AuthController(UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
-        this.userDetailsService = userDetailsService;
+    public AuthController(UserService userService, AuthenticationManager authenticationManager) {
+        this.userService = userService;
         this.authenticationManager = authenticationManager;
     }
 
     @GetMapping("/auth")
     @ResponseBody
     public Object auth() {
-        return new Result("fail", "密码不正确", false);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User loggedInUser = userService.getUserByUsername(username);
+
+        if (loggedInUser == null) {
+            return new Result("fail", "密码不正确", false);
+        }
+        return new Result("ok", null, true, loggedInUser);
     }
 
     @PostMapping("/auth/login")
@@ -40,15 +47,14 @@ public class AuthController {
         String userName = userNameAndPassword.get("username");
         String password = userNameAndPassword.get("password");
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+        UserDetails userDetails = userService.loadUserByUsername(userName);
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, password);
 
         try {
             authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(token);
 
-            User loggedInUser = new User(1L, "张三");
-            return new Result("ok", "登录成功", true, loggedInUser);
+            return new Result("ok", "登录成功", true, userService.getUserByUsername(userName));
 
         } catch (BadCredentialsException e) {
             return new Result("fail", "密码不正确", false);
