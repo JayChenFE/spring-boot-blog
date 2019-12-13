@@ -37,9 +37,10 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public User(Long id, String name) {
+    public User(Long id, String name, String encryptedPassword) {
         this.id = id;
         this.name = name;
+        this.encryptedPassword = encryptedPassword;
         this.avatar = "https://blog-server.hunger-valley.com/avatar/69.jpg";
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
