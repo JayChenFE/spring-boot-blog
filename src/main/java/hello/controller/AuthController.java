@@ -1,5 +1,7 @@
 package hello.controller;
 
+import hello.entity.LoginResult;
+import hello.entity.Result;
 import hello.entity.User;
 import hello.service.UserService;
 import org.springframework.dao.DuplicateKeyException;
@@ -39,9 +41,9 @@ public class AuthController {
         User loggedInUser = userService.getUserByUsername(username);
 
         if (loggedInUser == null) {
-            return Result.success("用户没有登录", false);
+            return LoginResult.success("用户没有登录", false);
         }
-        return Result.success(null, true, loggedInUser);
+        return LoginResult.success(null, loggedInUser);
     }
 
     @PostMapping("/auth/login")
@@ -54,7 +56,7 @@ public class AuthController {
         try {
             userDetails = userService.loadUserByUsername(username);
         } catch (UsernameNotFoundException e) {
-            return Result.failure("用户" + username + "不存在");
+            return LoginResult.failure("用户" + username + "不存在");
         }
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, password);
@@ -63,10 +65,10 @@ public class AuthController {
             authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(token);
 
-            return Result.success("登录成功", true, userService.getUserByUsername(username));
+            return LoginResult.success("登录成功", userService.getUserByUsername(username));
 
         } catch (BadCredentialsException e) {
-            return Result.failure("密码不正确");
+            return LoginResult.failure("密码不正确");
         }
     }
 
@@ -77,22 +79,22 @@ public class AuthController {
         String password = usernameAndPassword.get("password");
 
         if (username == null || password == null) {
-            return Result.failure("username/password == null");
+            return LoginResult.failure("username/password == null");
         }
         if (username.length() < 1 || username.length() > 15) {
-            return Result.failure("invalid username");
+            return LoginResult.failure("invalid username");
         }
         if (password.length() < 1 || password.length() > 15) {
-            return Result.failure("invalid password");
+            return LoginResult.failure("invalid password");
         }
 
         try {
             userService.save(username, password);
         } catch (DuplicateKeyException e) {
-            return Result.failure("user already exist");
+            return LoginResult.failure("user already exist");
         }
 
-        return Result.success("success", false);
+        return LoginResult.success("success", false);
     }
 
     @GetMapping("/auth/logout")
@@ -102,73 +104,9 @@ public class AuthController {
         User loggedInUser = userService.getUserByUsername(userName);
 
         if (loggedInUser == null) {
-            return Result.failure("用户没有登录");
+            return LoginResult.failure("用户没有登录");
         }
         SecurityContextHolder.clearContext();
-        return Result.success("注销成功", false);
-    }
-
-
-    private static class Result {
-        String status;
-        String msg;
-        boolean isLogin;
-        Object data;
-
-
-        public Result(String status, String msg, boolean isLogin) {
-            this(status, msg, isLogin, null);
-        }
-
-        public Result(String status, String msg, boolean isLogin, Object data) {
-            this.status = status;
-            this.msg = msg;
-            this.isLogin = isLogin;
-            this.data = data;
-        }
-
-        public static Result failure(String msg) {
-            return new Result("fail", msg, false);
-        }
-
-        public static Result success(String msg, boolean isLogin) {
-            return Result.success(msg, isLogin, null);
-        }
-
-        public static Result success(String msg, boolean isLogin, Object data) {
-            return new Result("ok", msg, isLogin, data);
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
-
-        public String getMsg() {
-            return msg;
-        }
-
-        public void setMsg(String msg) {
-            this.msg = msg;
-        }
-
-        public boolean isLogin() {
-            return isLogin;
-        }
-
-        public void setLogin(boolean login) {
-            isLogin = login;
-        }
-
-        public Object getData() {
-            return data;
-        }
-
-        public void setData(Object data) {
-            this.data = data;
-        }
+        return LoginResult.success("注销成功", false);
     }
 }

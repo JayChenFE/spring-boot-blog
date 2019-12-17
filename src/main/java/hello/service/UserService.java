@@ -1,7 +1,7 @@
 package hello.service;
 
 import hello.entity.User;
-import hello.mapper.UserMapper;
+import hello.dao.UserMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,9 +21,6 @@ public class UserService implements UserDetailsService {
     public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, UserMapper userMapper) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userMapper = userMapper;
-
-        //save("admin", "123");
-
     }
 
     public void save(String username, String password) {

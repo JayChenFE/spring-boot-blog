@@ -1,13 +1,12 @@
 package hello.service;
 
 import hello.entity.User;
-import hello.mapper.UserMapper;
+import hello.dao.UserMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -57,9 +56,5 @@ class UserServiceTest {
 
         Assertions.assertEquals("myUser", userDetails.getUsername());
         Assertions.assertEquals("myEncodedPassword", userDetails.getPassword());
-    }
-
-    @Test
-    void loadUserByUsername() {
     }
 }
