@@ -5,11 +5,13 @@ import hello.entity.Blog;
 import hello.entity.BlogListResult;
 import hello.entity.BlogResult;
 import hello.entity.User;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
 
+@Service
 public class BlogService {
 
     private BlogDao blogDao;

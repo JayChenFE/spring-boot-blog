@@ -176,7 +176,7 @@
                             <longModulepath>false</longModulepath>
                             <executable>sleep</executable>
                             <arguments>
-                                <argument>20</argument>
+                                <argument>30</argument>
                             </arguments>
                         </configuration>
                     </execution>
