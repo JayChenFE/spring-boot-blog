@@ -85,6 +85,4 @@ class AuthControllerTest {
                     Assertions.assertTrue(result.getResponse().getContentAsString().contains("MyUser"));
                 });
     }
-
-
 }

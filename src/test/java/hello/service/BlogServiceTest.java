@@ -37,5 +37,4 @@ class BlogServiceTest {
         Assertions.assertEquals("fail", result.getStatus());
         Assertions.assertEquals("系统异常", result.getMsg());
     }
-
 }
