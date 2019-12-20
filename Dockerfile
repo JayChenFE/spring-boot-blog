@@ -1,4 +1,4 @@
-FROM openjdk:11-alpine
+FROM openjdk:8-alpine
 RUN mkdir /app
 WORKDIR /app
 COPY target/gs-spring-boot-0.1.0.jar /app

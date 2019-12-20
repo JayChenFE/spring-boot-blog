@@ -2,5 +2,5 @@ before_install:
   - chmod +x mvnw
 language: java
 jdk:
-          - openjdk11
+          - openjdk8
 script: mvn verify

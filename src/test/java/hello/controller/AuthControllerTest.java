@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthControllerTest {
     private MockMvc mvc;
     @Mock
-    private UserService userService;
+    private     UserService userService;
     @Mock
     private AuthenticationManager authenticationManager;
 
