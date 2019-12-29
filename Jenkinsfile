@@ -41,7 +41,6 @@ def normalCIBuild(String version) {
 
 def deployVersion(String version) {
     sh "ssh root@120.24.214.142 'n=\$(docker ps -a |grep 120.24.214.142:5000/spring-boot-blog: |wc -l); if [[  \$n -gt 0 ]]; then docker rm -f spring-boot-blog;fi && docker run --name spring-boot-blog -d -p 8080:8080 120.24.214.142:5000/spring-boot-blog:${version}'"
-
 }
 
 def setScmPollStrategyAndBuildTypes(List buildTypes) {
