@@ -13,15 +13,10 @@ import java.util.Collections;
 
 @Service
 public class UserService implements UserDetailsService {
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    private UserMapper userMapper;
-
     @Inject
-    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, UserMapper userMapper) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.userMapper = userMapper;
-    }
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Inject
+    private UserMapper userMapper;
 
     public void save(String username, String password) {
         userMapper.save(username, bCryptPasswordEncoder.encode(password));
@@ -39,6 +34,7 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException(username + "不存在");
         }
 
-        return new org.springframework.security.core.userdetails.User(username, user.getEncryptedPassword(), Collections.emptyList());
+        return new org.springframework.security.core.userdetails.User(
+                username, user.getEncryptedPassword(), Collections.emptyList());
     }
 }

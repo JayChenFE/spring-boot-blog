@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Service
 public class BlogDao {
-    private SqlSession sqlSession;
+    private final SqlSession sqlSession;
 
     @Inject
     public BlogDao(SqlSession sqlSession) {
@@ -27,7 +27,7 @@ public class BlogDao {
     }
 
     public int count(Integer userId) {
-        return sqlSession.selectOne("countBlog", userId);
+        return sqlSession.selectOne("countBlog", asMap("userId", userId));
     }
 
     public Blog selectBlogById(int id) {
