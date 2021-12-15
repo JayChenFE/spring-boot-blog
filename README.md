@@ -1,5 +1,9 @@
 # spring-boot-blog
 
+## 预览地址
+
+https://jirengu-inc.github.io/vue-blog-preview
+
 ## 接口
 
 后端接口线上地址：待定
